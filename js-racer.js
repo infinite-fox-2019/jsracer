@@ -28,7 +28,7 @@ function sleep(milliseconds) {
 }
 
 function printBoard(lintasan) {
-    const player = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o'];
+    const player = ['🐸','🦊','🦍','🐴','🐵','🐰','🐷','🦁','🐥','🦝','🐨','🐻'];
     let lastStep = {}
     for (let i = 0; i < players; i++) {
         lastStep[player[i]] = 0;
@@ -70,7 +70,7 @@ function arrayToString(lintasanBoard) {
         lintasanString[i] = lintasanString[i].join('|')
     }
     console.log(lintasanString.join('\n'));
-    sleep(500);
+    sleep(100);
 }
 
 function clearScreen() {
