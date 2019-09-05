@@ -32,13 +32,13 @@ function main (){
     }
     let pemainke = 0
     while(true){
+        clearScreen()
         printBoard()
         printLine()
         if (finished() != undefined){
             return ''
         }
         sleep()
-        clearScreen()
         diceRoll(pemainke)
         if (pemainke == player-1){
             pemainke = 0
