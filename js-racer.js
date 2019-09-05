@@ -32,6 +32,17 @@ function jumlahLintasan(num){
 
 let lintasan = jumlahLintasan(Number(process.argv[2]))
 
+// let NO2 = [4,3]
+// lintasan[0][NO2[0]] = '>'
+// lintasan[0][NO2[1]] = '>'
+
+function gotNitro(indeks){
+  let NO2 = [Math.ceil(Math.random() * (Math.abs(panjangLintasan/2) - 3) + 3), Math.ceil(Math.random() * ((panjangLintasan-2) - Math.abs(panjangLintasan/2)+1) + Math.abs(panjangLintasan/2)+1)]
+  for(let i = 0; i < NO2.length; i++){
+    lintasan[indeks][NO2[i]] = '>'
+  }
+}
+
 function printLine () {
   for(let i = 0; i < lintasan.length; i++){
     console.log(lintasan[i].join(' |'))
@@ -51,13 +62,15 @@ function clearScreen () {
 }
 
 function play () {
-  printLine()
-  sleep(1500)
-
   let posisiAwal = []; // Posisi awal juga harus sama dengan jumlah lintasan yang dibuat
   for(let i = 0; i < lintasan.length; i++){
     posisiAwal.push(1);
+    gotNitro(i);
   }
+  
+  clearScreen();
+  printLine()
+  sleep(2000)
   
   let selesai = false;
   while(!selesai){
@@ -65,13 +78,25 @@ function play () {
 
       lintasan[i][posisiAwal[i]] = ' ';
       posisiAwal[i] += dadu();
+
+      if(lintasan[i][posisiAwal[i]] === '>'){
+        lintasan[i][posisiAwal[i]] = player[i];
+        let sebelumNitro = posisiAwal[i]
+        clearScreen()
+        printLine()
+        posisiAwal[i] += 3
+        console.log(' ')
+        console.log(`  ─=≡Σ((( つ•̀ω•́)つLET’S GO! ${player[i]} GOT NITRO`)
+        sleep(3000)
+        lintasan[i][sebelumNitro] = ' ';
+      }
       
       if(posisiAwal[i] >= lintasan[i].length-1){
         lintasan[i][panjangLintasan-1] = player[i]
         selesai = true;
         clearScreen()
         printLine()
-        sleep(1000)
+        sleep(500)
         winner(player[i])
         break;
       }
@@ -81,7 +106,7 @@ function play () {
 
       clearScreen()
       printLine()
-      sleep(1000)
+      sleep(500)
 
     }
   }
