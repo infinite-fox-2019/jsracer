@@ -1,8 +1,8 @@
 "use strict"
 
 // Data for playing game
-let player = 'abcdefghijklmnopqrstuvwxyz'.toLocaleUpperCase() // data untuk player bermain (maksimal 26 player)
-let panjangLintasan = Number(process.argv[2]); // Untuk merubah panjang lintasan
+const player = 'abcdefghijklmnopqrstuvwxyz'.toLocaleUpperCase() // data untuk player bermain (maksimal 26 player)
+const panjangLintasan = Number(process.argv[3]); // Untuk merubah panjang lintasan
 
 function dadu () {
   return Math.ceil(Math.random()*4)
@@ -30,7 +30,7 @@ function jumlahLintasan(num){
   return lintasan;
 }
 
-let lintasan = jumlahLintasan(Number(process.argv[3]))
+let lintasan = jumlahLintasan(Number(process.argv[2]))
 
 function printLine () {
   for(let i = 0; i < lintasan.length; i++){
@@ -87,13 +87,13 @@ function play () {
   }
 }
 
-if(process.argv[2] < 15){
+if(process.argv[3] < 15){
   console.log('Jumlah lintasan minimal 15')
 }
-else if(process.argv[3] < 2){
+else if(process.argv[2] < 2){
   console.log('Jumlah player minimal 2')
 }
-else if(process.argv[3] > 26){
+else if(process.argv[2] > 26){
   console.log('Maaf,untuk saat ini maksimal jumlah player adalah 26')
 }
 else{
