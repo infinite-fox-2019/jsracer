@@ -1,39 +1,107 @@
-"use strict"
+"use strict";
+printBoard();
 
-function diceRoll () {
-
+function diceRoll() {
+  let nextVal = Math.floor(Math.random() * 6) + 1;
+  return nextVal;
 }
 
-function sleep (milliseconds) {
+function sleep(milliseconds) {
   var start = new Date().getTime();
   for (var i = 0; i < 1e7; i++) {
-    if ((new Date().getTime() - start) > milliseconds) {
+    if (new Date().getTime() - start > milliseconds) {
       break;
     }
   }
 }
 
-function printBoard () {
-
+function printBoard() {
+  let player = Number(process.argv[2]);
+  let pos = Number(process.argv[3]);
+  if (player < 3) {
+    return console.log('Player minimal 2')
+  } else if (player > 10){
+    return console.log('Player maksimal 10')
+  }else if (pos < 15){
+    return console.log('Panjang lintasan minimal 15')
+  } else {
+    printLine(player, pos);
+  }
 }
 
-function printLine (player, pos) {
+function printLine(player, pos) {
+  let line = "";
+  let pemain = "abcdefghij";
+  let track = [];
+  for (let i = 0; i < player; i++) {
+    let temp = [];
+    for (let j = 0; j < pos; j++) {
+      if (j === 0) {
+        temp.push(pemain[i]);
+      } else {
+        temp.push(" ");
+      }
+    }
+    track.push(temp);
+    temp = [];
+  }
 
+  let max = 0;
+  while (max < pos - 1) {
+    let koor = [];
+    for (let i = 0; i < track.length; i++) {
+      for (let j = 0; j < track[i].length; j++) {
+        if (track[i][j] !== " ") {
+          koor.push(j);
+          track[i][j] = " ";
+        }
+        line = line + `|${track[i][j]}`;
+      }
+      line += "\n";
+    }
+    for (let i = 0; i < koor.length; i++) {
+      if (koor[i] > pos-5) {
+        koor[i] = koor[i] + 1;
+      } else {
+        koor[i] = koor[i] + diceRoll();
+      }
+    }
+    line = "";
+    for (let i = 0; i < track.length; i++) {
+      for (let j = 0; j < track[i].length; j++) {
+        if (track[i][koor[i]] === " ") {
+          track[i][koor[i]] = pemain[i];
+        }
+        line = line + `${track[i][j]}|`;
+      }
+      line += "\n";
+      
+    }
+    for (let i = 0; i < koor.length; i++) {
+      if (koor[i] > max) {
+        max = koor[i];
+      }
+      if (koor[i] == pos-1) {
+        console.log(line);
+        console.log(winner(pemain[i]));
+        return track;
+      }
+    }
+    console.log(line);
+    sleep(1000)
+    clearScreen()
+  }
 }
 
-function advance (player) {
+function advance(player) {}
 
+function finished(pemain) {}
+
+function winner(pemain) {
+  return `Player ${pemain} is the winner!!!`;
 }
 
-function finished () {
-
-}
-
-function winner () {
-
-}
-
-function clearScreen () {
+function clearScreen() {
   // Un-comment this line if you have trouble with console.clear();
   // return process.stdout.write('\033c');
   console.clear();
