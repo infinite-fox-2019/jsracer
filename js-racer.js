@@ -1,8 +1,8 @@
 "use strict"
 
-let args = process.argv.splice(2);
-let playerTotal = Number(args[0]);
-let roadLength = Number(args[1]);
+const args = process.argv.splice(2);
+const playerTotal = Number(args[0]);
+const roadLength = Number(args[1]);
 let errorMessages = [];
 
 if(!playerTotal) {
@@ -29,23 +29,18 @@ if(errorMessages.length > 0) {
   generatePlayerPositions();
   generateAdditionPositions();
   
+  clearScreen();
+  printBoard();
+  sleep(300);
+
   let finish = false;
   while(!finish) {
     for(let i = 0; i < playerTotal; i++) {
-      printBoard();
-      sleep(600);
-      clearScreen();
       advance(i);
       if(superPowerPositions.includes(playerPositions[i])) {
-        printBoard();
-        sleep(600);
-        clearScreen();
         advance(i);
       }
       if(obstaclePositions.includes(playerPositions[i])) {
-        printBoard();
-        sleep(600);
-        clearScreen();
         backtrack(i);
       }
       if(finished(i)){
@@ -55,11 +50,10 @@ if(errorMessages.length > 0) {
       }
     }
   }
-  console.log(obstaclePositions);
 }
 
 function diceRoll () {
-  return Math.floor(Math.random() * Math.floor(5) + 1);
+  return Math.floor(Math.random() * Math.floor(6) + 1);
 }
 
 function sleep (milliseconds) {
@@ -88,7 +82,7 @@ function printLine (player, pos) {
     } else if(superPowerPositions.includes(i)) {
       lane += '|>';
     } else {
-      lane += '| '
+      lane += '| ';
     }
   }
   console.log(lane);
@@ -101,6 +95,9 @@ function advance (player) {
   if(playerPositions[player] > roadLength) {
     playerPositions[player] = roadLength;
   }
+  clearScreen();
+  printBoard();
+  sleep(300);
 }
 
 function backtrack (player) {
@@ -109,6 +106,9 @@ function backtrack (player) {
   if(playerPositions[player] <= 0) {
     playerPositions[player] = 0;
   }
+  clearScreen();
+  printBoard();
+  sleep(300);
 }
 
 function finished(player) {
@@ -119,7 +119,6 @@ function finished(player) {
 }
 
 function winner (i) {
-  printBoard();
   console.log(`Player ${String.fromCharCode(i + 97)} is the winner`);
 }
 
