@@ -2,7 +2,7 @@
 printBoard();
 
 function diceRoll() {
-  let nextVal = Math.floor(Math.random() * 6) + 1;
+  let nextVal = Math.floor(Math.random() * 2) + 1;
   return nextVal;
 }
 
@@ -22,7 +22,7 @@ function printBoard() {
     return console.log('Player minimal 2')
   } else if (player > 10){
     return console.log('Player maksimal 10')
-  }else if (pos < 15){
+  }else if (pos < 8){
     return console.log('Panjang lintasan minimal 15')
   } else {
     printLine(player, pos);
@@ -30,7 +30,6 @@ function printBoard() {
 }
 
 function printLine(player, pos) {
-  let line = "";
   let pemain = "abcdefghij";
   let track = [];
   for (let i = 0; i < player; i++) {
@@ -53,43 +52,39 @@ function printLine(player, pos) {
       for (let j = 0; j < track[i].length; j++) {
         if (track[i][j] !== " ") {
           koor.push(j);
-          track[i][j] = " ";
         }
-        line = line + `|${track[i][j]}`;
       }
-      line += "\n";
     }
+
     for (let i = 0; i < koor.length; i++) {
-      if (koor[i] > pos-5) {
-        koor[i] = koor[i] + 1;
-      } else {
-        koor[i] = koor[i] + diceRoll();
-      }
+      koor[i] = koor[i] + diceRoll();
+      if (koor[i] >= pos) {
+        koor[i] = pos -1
+      } 
     }
-    line = "";
+
     for (let i = 0; i < track.length; i++) {
       for (let j = 0; j < track[i].length; j++) {
         if (track[i][koor[i]] === " ") {
           track[i][koor[i]] = pemain[i];
         }
-        line = line + `${track[i][j]}|`;
+        if (koor[i] == pos-1){
+          console.log(track);
+          console.log(winner(pemain[i]));
+          return track;
+        }
+        track[i][j] = " ";
       }
-      line += "\n";
-      
+      console.log(track)
+      sleep(500)
+    clearScreen()
     }
+    
     for (let i = 0; i < koor.length; i++) {
       if (koor[i] > max) {
         max = koor[i];
       }
-      if (koor[i] == pos-1) {
-        console.log(line);
-        console.log(winner(pemain[i]));
-        return track;
-      }
     }
-    console.log(line);
-    sleep(1000)
-    clearScreen()
   }
 }
 
