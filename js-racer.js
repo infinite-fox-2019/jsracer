@@ -22,7 +22,7 @@ function sleep (milliseconds) {
 }
 
 function generatePlayer(num){
-  let daftarPlayers = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o']
+  let daftarPlayers = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
   let players = []
   for(let i = 0; i<num; i++){
     players.push(daftarPlayers[i])
@@ -41,14 +41,21 @@ function playerLocator(num) {
 function printBoard (player) {
   let board = ['|', player];
   let countBintang = 0;
+  let limitBintang = 3;
+  let space = 0;
+  if(besarBoard >30){
+    limitBintang = 5
+  }
   for(let i = 0; i<besarBoard; i++){
     let random = Math.floor(Math.random() * 6);
-    if(random == 1 && countBintang<3){
+    if(random == 1 && countBintang<limitBintang && space <= 0){
       board.push('|','*')
       countBintang++
+      space = 2;
     }
     else{
-      board.push('|',' ')
+      board.push('|',' ');
+      space--
     }
   }
   return board;
@@ -110,8 +117,8 @@ function start() {
   
   while(!selesai){
     for(let i = 0; i<jumlahPlayer; i++){
-      console.log(lokasiPlayer);
-      sleep(1000)
+      console.log(player[i], lokasiPlayer[i]/2);
+      sleep(500)
       clearScreen();
       mover(objBoardWithPlayer, i);
       for(let key in objBoardWithPlayer){
@@ -120,7 +127,7 @@ function start() {
           for(let i = 0; i<jumlahPlayer; i++){
             console.log(objBoardWithPlayer[generatePlayer(jumlahPlayer)[i]].join(''));
           }
-          console.log(`${player[i].toUpperCase()} adalah pemenangnya`);
+          console.log(`Player ${player[i].toUpperCase()} adalah pemenangnya`);
           
           return;
         }
@@ -130,4 +137,18 @@ function start() {
   }
 }
 
-start()
+if(jumlahPlayer<2){
+  console.log('Jumlah player kurang');
+}
+else if(jumlahPlayer>26){
+  console.log('Jumlah player terlalu banyak');
+}
+else if(besarBoard<15){
+  console.log('Lintasan terlalu pendek');
+}
+else if(besarBoard>50){
+  console.log('Lintasan terlalu panjang');
+}
+else{
+  start()
+}
