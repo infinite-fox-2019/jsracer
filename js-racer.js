@@ -1,21 +1,12 @@
 "use strict"
 
-// const playersArg = Number(process.argv[2])
+const playersArg = Number(process.argv[2])
 const rute = Number(process.argv[3])
-const players = [
-  {
-    name: 'a',
-    pos: 0
-  },
-  {
-    name: 'b',
-    pos: 0
-  },
-  // {
-  //   name: 'c',
-  //   pos: 0
-  // },
-]
+const players = []
+
+for (let i = 0; i < playersArg; i++) {
+  players.push({ name: String.fromCharCode(97 + i), pos: 0 })
+}
 
 function diceRoll() {
   return Math.ceil(Math.random() * 3)
@@ -36,7 +27,6 @@ function printBoard() {
   for (let i = 0; i < players.length; i++) {
     let distance = []
     for (let j = 0; j < rute; j++) {
-      // if (j === 0) distance.push(`${players[i].name}`)
       distance.push(' ')
     }
     board.push(distance)
@@ -46,6 +36,7 @@ function printBoard() {
 }
 
 function printLine(player, pos) {
+  if (!players.length) return
   let isFinish = false
   let win = ''
   const board = printBoard()
@@ -69,7 +60,7 @@ function printLine(player, pos) {
         isFinish = true
       }
       clearScreen()
-      console.log(board, players)
+      console.log(board)
       sleep(500)
     }
   }
