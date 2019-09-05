@@ -37,7 +37,7 @@ let lintasan = jumlahLintasan(Number(process.argv[2]))
 // lintasan[0][NO2[1]] = '>'
 
 function gotNitro(indeks){
-  let NO2 = [Math.ceil(Math.random() * (Math.abs(panjangLintasan/2) - 3) + 3), Math.ceil(Math.random() * ((panjangLintasan-2) - Math.abs(panjangLintasan/2)+1) + Math.abs(panjangLintasan/2)+1)]
+  let NO2 = [Math.ceil(Math.random() * (Math.abs(panjangLintasan/2) - 3) + 3), Math.ceil(Math.random() * ((panjangLintasan-5) - Math.abs(panjangLintasan/2)+1) + Math.abs(panjangLintasan/2)+1)]
   for(let i = 0; i < NO2.length; i++){
     lintasan[indeks][NO2[i]] = '>'
   }
