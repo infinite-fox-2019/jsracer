@@ -6,9 +6,17 @@ function generateBoard(pemain, lintasan) {
       board[i].push(' ')
     }
   }
+  for (let k=0; k<pemain; k++) {
+    rand = posisiRandom()
+    board[k][rand.j] = '*'
+  }
   return board
 }
 
+function posisiRandom() {
+  j = Math.ceil(Math.random()*7)
+  return {j:j}
+}
 
 function start(board, jumlahPemain, calonPemain) {
   for (let j=0; j<jumlahPemain; j++) {
@@ -27,6 +35,21 @@ function main(board, calonPemain, jumlahPemain) {
     let hasilDadu = dadu()
     posisiAkhir = posisiAwal + hasilDadu
     if (posisiAkhir > board[i].length-1) posisiAkhir = board[i].length-1
+    //cek apakah dapat superpower
+    if (board[i][posisiAkhir] == '*') {
+      sleep(1000)
+      board[i][posisiAkhir] = calonPemain[i]
+      for (j=0; j<jumlahPemain; j++) {
+        console.log(board[j].join('|'))
+      }
+      sleep(1000)
+      board[i][posisiAkhir] = '*'
+      board[i][board[i].length-1] = calonPemain[i]
+      for (j=0; j<jumlahPemain; j++) {
+        console.log(board[j].join('|'))
+      }
+      return `Pemenangnya adalah ${calonPemain[i]}`
+    }
     board[i][posisiAkhir] = calonPemain[i]
     sleep(1000)
     for (j=0; j<jumlahPemain; j++) {
@@ -43,7 +66,7 @@ function main(board, calonPemain, jumlahPemain) {
 }
   
 function dadu() {
-  return Math.ceil(Math.random()*3)
+  return Math.ceil(Math.random()*4)
 }
 
 function clearScreen() {
