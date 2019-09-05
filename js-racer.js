@@ -1,7 +1,5 @@
 "use strict"
 
-console.log(process.argv);
-
 function diceRoll () {
   const dadu = Math.floor(Math.random() * 6 + 1);
   return dadu;
@@ -43,41 +41,44 @@ function printLine (player, pos) {
   let position = positionPlayer(player)
   let alphabet = advance(player)
   let array = printBoard(player, pos)
-  clearScreen()
-  finished(array)
-  sleep(500)
-  clearScreen()
+  if (player < 2 || pos < 15) {
+    console.log('Inputan jumlah player minimal 2 dan panjang lintasan minimal 15');
+  } else {
+    clearScreen()
+    finished(array)
+    sleep(500)
+    clearScreen()
   
-  let cond = true;
+    let cond = true;
 
-  while (cond) {
-    for (let i = 0; i < player; i++) {
-      position[i] += diceRoll()
-      if (position[i] >= pos - 1) {
-        position[i] = pos - 1
-      }
-      for (let j = 0; j < array[i].length; j++) {
-
-        if (j === position[i]) {
-          array[i][j] = alphabet[i]
+    while (cond) {
+      for (let i = 0; i < player; i++) {
+        position[i] += diceRoll()
+        if (position[i] >= pos - 1) {
+          position[i] = pos - 1
         }
-        else {
-          array[i][j] = " "
-        }
-      }
+        for (let j = 0; j < array[i].length; j++) {
 
-      finished(array)
-      if (array[i][pos - 1] !== " ") {
-        console.log(winner(alphabet[i]));
-        cond = false;
-        break;
+          if (j === position[i]) {
+            array[i][j] = alphabet[i]
+          }
+          else {
+            array[i][j] = " "
+          }
+        }
+
+        finished(array)
+        if (array[i][pos - 1] !== " ") {
+          console.log(winner(alphabet[i]));
+          cond = false;
+          break;
+        }
+        sleep(1000)
+        clearScreen()
       }
-      sleep(1000)
-      clearScreen()
     }
-
-  }
-}
+  } 
+};
 //function advance untuk player
 function advance (player) {
   let alphabet = 'abcdefghijklmnopqrstuvwxyz'
@@ -89,7 +90,7 @@ function advance (player) {
 }
 //function finished untuk display default
 function finished (array) {
-  for (var i = 0; i < array.length; i++) {
+  for (let i = 0; i < array.length; i++) {
     console.log(array[i].join("|"))
   }
 }
