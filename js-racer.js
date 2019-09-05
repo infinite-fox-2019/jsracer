@@ -40,8 +40,16 @@ function playerLocator(num) {
 
 function printBoard (player) {
   let board = ['|', player];
+  let countBintang = 0;
   for(let i = 0; i<besarBoard; i++){
-    board.push('|',' ')
+    let random = Math.floor(Math.random() * 6);
+    if(random == 1 && countBintang<3){
+      board.push('|','*')
+      countBintang++
+    }
+    else{
+      board.push('|',' ')
+    }
   }
   return board;
 }
@@ -61,9 +69,12 @@ function awalRace(obj) {
 function mover(obj, i) {
     let randomize = diceRoll() * 2;
     
-    obj[generatePlayer(jumlahPlayer)[i]][lokasiPlayer[i]] = ' '
+    obj[generatePlayer(jumlahPlayer)[i]][lokasiPlayer[i]] = ' ';
     lokasiPlayer[i] += randomize;
-    
+    if(obj[generatePlayer(jumlahPlayer)[i]][lokasiPlayer[i]] == '*'){
+      obj[generatePlayer(jumlahPlayer)[i]][lokasiPlayer[i]] = ' ';
+      lokasiPlayer[i] += 12;
+    }
     if(lokasiPlayer[i] > obj[player[i]].length -1){
       obj[generatePlayer(jumlahPlayer)[i]][obj[player[i]].length -1] = player[i]  
     }
@@ -99,7 +110,8 @@ function start() {
   
   while(!selesai){
     for(let i = 0; i<jumlahPlayer; i++){
-      sleep(100)
+      console.log(lokasiPlayer);
+      sleep(1000)
       clearScreen();
       mover(objBoardWithPlayer, i);
       for(let key in objBoardWithPlayer){
