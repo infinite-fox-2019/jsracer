@@ -117,10 +117,10 @@ function start() {
   
   while(!selesai){
     for(let i = 0; i<jumlahPlayer; i++){
-      console.log(player[i], lokasiPlayer[i]/2);
       sleep(500)
       clearScreen();
       mover(objBoardWithPlayer, i);
+      console.log(player[i], (lokasiPlayer[i]+1)/2);
       for(let key in objBoardWithPlayer){
         selesai = finished()
         if(selesai){
