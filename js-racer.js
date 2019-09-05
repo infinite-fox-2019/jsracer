@@ -4,7 +4,6 @@ let args = process.argv.splice(2);
 let playerTotal = Number(args[0]);
 let roadLength = Number(args[1]);
 let errorMessages = [];
-let positions = [];
 
 if(!playerTotal) {
   errorMessages.push('Jumlah pemain harus diisi!');
@@ -18,30 +17,47 @@ if(!roadLength) {
   errorMessages.push('Jumlah panjang lintasan minimal 15!');
 }
 
+let playerPositions = [];
+let obstaclePositions = [];
+let superPowerPositions = [];
+
 if(errorMessages.length > 0) {
   for(let i = 0; i < errorMessages.length; i++) {
     console.log(errorMessages[i]);
   }
 } else {
-  for(let i = 0; i < playerTotal; i++) {
-    positions.push(0);
-  }
+  generatePlayerPositions();
+  generateAdditionPositions();
+  
   let finish = false;
   while(!finish) {
     for(let i = 0; i < playerTotal; i++) {
       printBoard();
-      advance(i);
-      sleep(300);
+      sleep(600);
       clearScreen();
+      advance(i);
+      if(superPowerPositions.includes(playerPositions[i])) {
+        printBoard();
+        sleep(600);
+        clearScreen();
+        advance(i);
+      }
+      if(obstaclePositions.includes(playerPositions[i])) {
+        printBoard();
+        sleep(600);
+        clearScreen();
+        backtrack(i);
+      }
       if(finished(i)){
         finish = true;
-        printBoard();
-        console.log(winner(i));
+        winner(i);
         break;
       }
     }
   }
+  console.log(obstaclePositions);
 }
+
 function diceRoll () {
   return Math.floor(Math.random() * Math.floor(5) + 1);
 }
@@ -58,14 +74,22 @@ function sleep (milliseconds) {
 function printBoard () {
   for(let i = 0; i < playerTotal; i++) {
     let player = String.fromCharCode(i + 97)
-    printLine(player, positions[i]);
+    printLine(player, playerPositions[i]);
   }
 }
 
 function printLine (player, pos) {
   let lane = '';
   for(let i = 0; i <= roadLength; i++) {
-    lane += `|${i !== pos ? ' ' : player}`;
+    if(i === pos) {
+      lane += `|${player}`;
+    } else if(obstaclePositions.includes(i)) {
+      lane += '|<';
+    } else if(superPowerPositions.includes(i)) {
+      lane += '|>';
+    } else {
+      lane += '| '
+    }
   }
   console.log(lane);
   debugger;
@@ -73,25 +97,62 @@ function printLine (player, pos) {
 
 function advance (player) {
   let diceNumber = diceRoll();
-  positions[player] += diceNumber;
-  if(positions[player] > roadLength) {
-    positions[player] = roadLength;
+  playerPositions[player] += diceNumber;
+  if(playerPositions[player] > roadLength) {
+    playerPositions[player] = roadLength;
+  }
+}
+
+function backtrack (player) {
+  let diceNumber = diceRoll();
+  playerPositions[player] -= diceNumber;
+  if(playerPositions[player] <= 0) {
+    playerPositions[player] = 0;
   }
 }
 
 function finished(player) {
-  if(positions[player] >= roadLength) {
+  if(playerPositions[player] >= roadLength) {
     return true;
   }
   return false;
 }
 
 function winner (i) {
-  return `Player ${String.fromCharCode(i + 97)} is the winner`;
+  printBoard();
+  console.log(`Player ${String.fromCharCode(i + 97)} is the winner`);
 }
 
 function clearScreen () {
   // Un-comment this line if you have trouble with console.clear();
   // return process.stdout.write('\033c');
   console.clear();
+}
+
+function generatePlayerPositions() {
+  for(let i = 0; i < playerTotal; i++) {
+    playerPositions.push(0);
+  }
+}
+
+function generateAdditionPositions() {
+  let positions = [];
+  for(let i = 0; i < roadLength; i++) {
+    positions[i] = i;
+  }
+
+  let additionTotal = Math.ceil(roadLength/10);
+  for(let i = 0; i < additionTotal; i++) {
+    let randomObstaclePosition = getRandomNumber(positions.length);
+    obstaclePositions.push(positions[randomObstaclePosition]);
+    positions.splice(randomObstaclePosition, 1);
+  
+    let randomSuperPowerPosition = getRandomNumber(positions.length);
+    superPowerPositions.push(positions[randomSuperPowerPosition]);
+    positions.splice(randomSuperPowerPosition, 1);
+  }
+}
+
+function getRandomNumber(max) {
+  return Math.floor(Math.random() * Math.floor(max));
 }
